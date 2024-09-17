@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="{{ url_for('static', filename='calendar.css') }}" rel="stylesheet">
+<div class="container">
+    <h2 class="text-center my-4">Weekly Class Schedule</h2>
+
+    <div class="row">
+        <!-- Create 7 equal columns for Monday to Sunday -->
+        <div class="col-12">
+            <div class="row text-center bg-light">
+                <div class="col border">Monday</div>
+                <div class="col border">Tuesday</div>
+                <div class="col border">Wednesday</div>
+                <div class="col border">Thursday</div>
+                <div class="col border">Friday</div>
+                <div class="col border">Saturday</div>
+                <div class="col border">Sunday</div>
+            </div>
+        </div>
+
+        <!-- Display the classes for each day in a grid -->
+        <div class="col-12">
+            <div class="row">
+                {% for day, classes in schedule.items() %}
+                <div class="col border">
+                    {% if classes %}
+                        <ul class="list-group list-group-flush">
+                            {% for class in classes %}
+                                <li class="list-group-item">{{ class }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-center">No classes</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

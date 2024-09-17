@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Admin Dashboard</h2>
+
+    <!-- User Stats Section -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Users</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ total_users }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Admins</div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ total_admins }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Registration Trends -->
+    <h3>User Registration Trends (Last 7 Days)</h3>
+    <canvas id="registrationChart"></canvas>
+
+    <h3>Weekly Registration Trends (Last 4 Weeks)</h3>
+    <canvas id="weeklyChart"></canvas>
+
+    <h3>Monthly Registration Trends (Last 3 Months)</h3>
+    <canvas id="monthlyChart"></canvas>
+
+    <!-- Chart.js Script -->
+    <script>
+        var ctx = document.getElementById('registrationChart').getContext('2d');
+        var registrationChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for date, count in daily_registrations %}
+                        '{{ date }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Daily Registrations',
+                    data: [
+                        {% for date, count in daily_registrations %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxWeekly = document.getElementById('weeklyChart').getContext('2d');
+        var weeklyChart = new Chart(ctxWeekly, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for week, count in weekly_registrations %}
+                        '{{ week }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Weekly Registrations',
+                    data: [
+                        {% for week, count in weekly_registrations %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+        var monthlyChart = new Chart(ctxMonthly, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for month, count in monthly_registrations %}
+                        '{{ month }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Monthly Registrations',
+                    data: [
+                        {% for month, count in monthly_registrations %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Pie Chart for User Roles -->
+    <h3>User Role Distribution</h3>
+    <canvas id="roleChart"></canvas>
+    
+    <script>
+        var ctx = document.getElementById('roleChart').getContext('2d');
+        var roleChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [
+                    {% for role, count in users_per_role %}
+                        '{{ role }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'User Roles',
+                    data: [
+                        {% for role, count in users_per_role %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+
+    <!-- Recent Users Section -->
+    <h3>Recently Registered Users</h3>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in recent_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

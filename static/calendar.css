@@ -1,0 +1,22 @@
+    .row.text-center.bg-light {
+        font-weight: bold;
+        background-color: #f8f9fa;
+    }
+
+    .col.border {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+    }
+
+    .list-group-item {
+        background-color: #f8f9fa;
+        border: none;
+    }
+
+    .list-group-item:not(:last-child) {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .list-group-item {
+        text-align: center;
+    }
